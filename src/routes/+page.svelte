@@ -341,7 +341,7 @@
 			</button>
 
 			<a
-				href="/prepare.html"
+				href="/prepare"
 				class="min-h-11 self-start rounded-lg border px-4 leading-[2.75rem]"
 				style="border-color: var(--line)"
 			>

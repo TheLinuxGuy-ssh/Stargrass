@@ -9,6 +9,9 @@
 
 export type OfflineState = 'unsupported' | 'preparing' | 'ready' | 'failed';
 
+/** Must match CACHE in static/sw.js. Pinned by a test. */
+export const CACHE_NAME = 'stargrass-v1';
+
 function loadedUrls(): string[] {
 	const urls = new Set<string>([location.origin + '/']);
 
@@ -74,7 +77,7 @@ async function confirmCached(urls: string[]): Promise<void> {
 	const missing = urls.filter((url) => url.startsWith(location.origin));
 	if (missing.length === 0) return;
 
-	const cache = await caches.open('stargrass-v1');
+	const cache = await caches.open(CACHE_NAME);
 	const results = await Promise.all(missing.map((url) => cache.match(url)));
 	const absent = results.filter((hit) => hit === undefined).length;
 

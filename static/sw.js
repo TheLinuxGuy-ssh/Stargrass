@@ -10,7 +10,16 @@
 
 const CACHE = 'stargrass-v1';
 
-const PRECACHE = ['/', '/index.html', '/prepare.html', '/manifest.webmanifest'];
+/*
+ * These paths must be the ones the host actually serves. Vercel maps a
+ * prerendered /prepare to /prepare and answers 404 for /prepare.html, so the
+ * extensionless form is the correct one there. Testing against a bare static
+ * file server gives the opposite answer and hides the bug.
+ *
+ * Both / and /index.html are listed because the navigate fallback uses the
+ * latter, and it has to be readable offline.
+ */
+const PRECACHE = ['/', '/index.html', '/prepare', '/manifest.webmanifest'];
 
 self.addEventListener('install', (event) => {
 	event.waitUntil(

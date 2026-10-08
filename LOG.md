@@ -170,3 +170,20 @@ The M1 fixture still passes to the second, and four new tests hold the behaviour
 **Current state for the field test.** Ninety eight tests, `check` clean, `build` clean, both pages verified offline with the server killed. The tonight card at the fixture instant reads: darkness 07:19 PM to 04:58 AM, 9h 39m, Waning Crescent 18 percent lit, moon rising 02:47 AM, seventeen files saved for offline use.
 
 **Still to do by hand, tonight or tomorrow night.** Prepare on wifi, then airplane mode, then ask five questions about things actually visible and check each against the sky. Record signal bars, response time, battery drop and whether the phone gets hot. New moon is 15:50Z on 10 October, so the nights of the 9th and 10th are the darkest of the week. Check the weather the day before and keep a backup night.
+
+## The /prepare 404 on the live site
+
+**A bug I introduced and my own testing could not see.** The user opened the deployed app and reported that "Prepare for offline" returned a 404. The cause was in the M5 entry above: I found that the service worker was precaching `/prepare` while the build emits `prepare.html`, and since `cache.addAll` rejects as a group, one 404 would fail the entire install. I "fixed" it by linking to `/prepare.html`.
+
+That was right about the local server and wrong about production. Vercel maps a prerendered route to its **extensionless** path and answers **404** for `/prepare.html`. Python's `http.server`, which is what I tested against, does the exact opposite. So the fix that passed every local test produced the 404 the user actually saw.
+
+```
+https://stargrass.vercel.app/prepare       -> 200
+https://stargrass.vercel.app/prepare.html  -> 404
+```
+
+**The lesson is about the test, not the code.** Serving the build with a bare static file server cannot answer this question, because that server has no rewrite rules while a real static host does. I had a server killed test, a `Vary` header test, and a precache test, and all three were blind to it, because all three ran against the wrong kind of server. The fix is to ask the actual host what it serves, which costs one `curl`.
+
+**Paths are now pinned by a test** in `src/lib/ui/offline.spec.ts`. It asserts that the worker precaches `/prepare` and not `/prepare.html`, that the page links to `/prepare`, and that the cache name in the worker matches the exported `CACHE_NAME` the app code uses, so the two cannot drift. One hundred and two tests pass.
+
+Getting the file text into a test needed care. The natural version reads it with `node:fs`, which fails the type check because this project has no Node type definitions and adding them would be a new dependency for a test convenience. Instead the spec imports both files through Vite's `?raw` suffix, which resolves them at build time and needs no types. Worth noting that a rule meant for the app leaked into the tooling, and the constraint was better solved than waived.
