@@ -10,4 +10,8 @@ One entry per milestone. What was built, what surprised me, what the agent got w
 
 **Not sure yet.** `npm run test` currently reports no test files, since the scaffold example tests were removed. That is expected before M1. The Vercel deploy route was left open: CLI or GitHub integration. The GitHub CLI is not installed on this machine, so the repository is created by hand in the browser and pushed over HTTPS.
 
+Printed the Gemma builds that the installed `@mlc-ai/web-llm` version actually ships, instead of trusting the ID written in the spec. Four matter: `gemma3-1b-it-q4f16_1-MLC` at 711 MB, `gemma-2b-it-q4f16_1-MLC` at 1477 MB, `gemma-2-2b-it-q4f16_1-MLC` at 1895 MB, and `gemma-2-2b-it-q4f32_1-MLC` at 2509 MB. The ID in the spec is real, so that plan stands.
+
+One thing the spec did not anticipate: `gemma3-1b-it` only ships a `q4f16_1` build. There is no `q4f32_1` for the 1B model. If the phone reports no `shader-f16`, the smallest build that still runs is the 2B `q4f32_1` at 2509 MB of VRAM. So the fallback costs more memory than the model it replaces, which decides the plan more sharply than the spec assumed.
+
 **Still open.** No phone check yet. WebGPU and `shader-f16` support are unverified, and that decides whether M3 uses the `q4f16_1` or `q4f32_1` Gemma build.
