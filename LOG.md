@@ -14,4 +14,26 @@ Printed the Gemma builds that the installed `@mlc-ai/web-llm` version actually s
 
 One thing the spec did not anticipate: `gemma3-1b-it` only ships a `q4f16_1` build. There is no `q4f32_1` for the 1B model. If the phone reports no `shader-f16`, the smallest build that still runs is the 2B `q4f32_1` at 2509 MB of VRAM. So the fallback costs more memory than the model it replaces, which decides the plan more sharply than the spec assumed.
 
-**Still open.** No phone check yet. WebGPU and `shader-f16` support are unverified, and that decides whether M3 uses the `q4f16_1` or `q4f32_1` Gemma build.
+**Still open.** No phone check yet. WebGPU and `shader-f16` support are unverified, and that decides whether M3 uses the `q4f16_1` or `q4f32_1` Gemma build.## M1. Sky core
+
+**Built.** `src/lib/sky/` as pure TypeScript with no UI imports: `observer.ts`, `bodies.ts`, `twilight.ts`, `moon.ts`, `format.ts`, `tools.ts`, plus 27 Vitest tests in `sky.spec.ts`. Every row of the section 5 fixture table has a test. All pass, and `check` and `build` are clean.
+
+**The reference code in the spec does not reproduce its own fixture.** This is the one thing worth keeping from this milestone. The spec defines dusk as `SearchAltitude(Sun, observer, -1, from, 1, -18)` and then lists the expected answer as `2026-10-06T13:49:51Z` for a reference time of `14:00:00Z`. Those cannot both be right, because the expected answer is nine minutes *before* the reference time and a forward search cannot return the past.
+
+The cause is real and worth understanding. At 14:00Z the sun is already 19.7 degrees below the horizon, so astronomical night is already underway and its dusk has happened. The naive search finds the next downward crossing instead, which is tomorrow at `13:48:44Z`, off by a full day. Starting the search a day earlier returns `13:49:51Z`, exactly the fixture. So `twilight.ts` checks the sun's altitude first and searches backward a day when the sun is already down.
+
+Any "tonight" screen that searches forward for dusk will show the wrong night for every query made after dusk has passed, which is most of the night. This would have shipped as an off by one night bug that only shows up in the dark.
+
+**Tolerances.** The spec asks for 0.3 degrees and 2 minutes and wants them explained.
+
+Positions get 0.3 degrees because the library is deterministic: the same inputs give the same float every run, so observed error against each fixture row is zero to four thousandths of a degree, far inside the band. The band is not there to absorb noise in the code. It is slack for the J2000 to of date reduction that will change if astronomy-engine updates its star catalog or precession model, and for the one degree of difference the section 9 Stellarium comparison expects from refraction settings. A tolerance tighter than that would turn a library upgrade into a red test that means nothing.
+
+Times get 2 minutes for the same reason plus one more. `SearchAltitude` and `SearchRiseSet` walk in fixed steps and interpolate, so their answers move by a few seconds as a step boundary shifts. Two minutes is generous on top of that, and it still catches a genuine error: the wrong dusk is off by 24 hours, and the wrong moon phase is off by several days, so nothing meaningful hides inside this band.
+
+Illumination uses 1 percentage point, since the fixture says "about 18 percent" and the actual value is 18.4.
+
+**Not sure yet.** The fixtures came from astronomy-engine itself, as the spec notes, so they prove the code does not regress, not that the numbers are right. They are not independent evidence. Stellarium in section 9 is.
+
+`whatsUp` filters direction by exact compass match, so "E" returns Saturn but "east" returns nothing unless normalized upstream. M2 and M4 will have to normalize the word before it reaches here.
+
+`phaseName` buckets phase degrees into eight 45 degree bands. That puts the boundary between Waning Crescent and New Moon at 337.5 degrees, which is correct, but a moon sitting exactly on a boundary jumps straight from one name to the next with nothing in between.
