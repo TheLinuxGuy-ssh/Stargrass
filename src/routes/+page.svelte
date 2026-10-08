@@ -100,9 +100,11 @@
 		if (place === null) return;
 		const trimmed = question.trim();
 		if (trimmed === '') return;
-		const reply = ask(trimmed, place, displayTime);
-		answer = reply.text;
-		mode = reply.mode;
+		question = '';
+		void ask(trimmed, place, displayTime).then((reply) => {
+			answer = reply.text;
+			mode = reply.mode;
+		});
 	}
 </script>
 
@@ -337,6 +339,14 @@
 			>
 				Change location
 			</button>
+
+			<a
+				href="/prepare.html"
+				class="min-h-11 self-start rounded-lg border px-4 leading-[2.75rem]"
+				style="border-color: var(--line)"
+			>
+				Prepare for offline
+			</a>
 		</footer>
 	{/if}
 </main>

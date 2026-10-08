@@ -132,3 +132,21 @@ what is up in the north   Looking north you should see Polaris (N, 2.8 fists).
 This matters more than it did before M3 turned out how it did. With no model available, every one of those answers came from the keyword router and a template, and "show me Betelgeuse" is exactly the case the fallback was supposed to cover.
 
 **Catalogue licensing.** HYG is CC BY-SA 4.0, so attribution is a licence condition rather than a courtesy. The credit is in the README naming the database, its author and the licence. The 13 MB source catalogue is a build input and is gitignored; only the 17 KB derived JSON is committed, and `build-stars.mjs` documents the exact download command.
+
+## M4. Model layer, written but not proven
+
+**Built.** `webgpu.ts` for capability detection and model selection, `engine.ts` for the web worker load with progress and a storage persistence request, `router.ts` for JSON grammar constrained tool selection, `narrate.ts` for phrasing a tool result, and `src/routes/prepare/` with the three readiness checks. Eighty six tests pass, `check` and `build` are clean.
+
+**None of it has ever run a model.** Every one of these files was checked by types, by unit tests on their pure parts, and by reading the installed library's own typings. The end to end path was never executed, because M3 established there is no device here that can. Treat it as unproven code that ships, not as a working feature. The Prepare screen says so on the device itself: it reports no GPU and explains that the app is in keyword mode.
+
+**What the types caught.** Three of these were wrong before the compiler saw them. `WebWorkerMLCEngineHandler` takes no constructor arguments, so `CreateWebWorkerMLCEngine` builds it internally and takes the raw Worker. `response_format.schema` is a serialised JSON schema string, not an object, so passing an object would have silently failed to constrain anything. And `StorageEstimate.quota` and `.usage` are both optional, so reading them unguarded is a type error rather than a crash.
+
+**A routing failure must not hand the answer to the model anyway.** My first version did `await model.route(q) ?? fallbackCall` and then narrated whatever tool came back. So when the model failed to route, the keyword router chose the tool and the model still got to write the sentence, which is the one place a hallucinated number could get in. A test caught it. Now a failed route returns the template immediately and the model is not consulted at all.
+
+**Two offline bugs that would have shown up in the field, not in any test.** The build emits `prepare.html` but the service worker precached `/prepare`, which 404s. `cache.addAll` rejects as a group, so one bad path fails the whole install and the app ends up with no cache at all, silently, while everything looks fine. Precache now adds each entry individually and lets a miss pass. Both pages link to `/prepare.html` so the path is real on any static host.
+
+The second was a Svelte keyed `{#each}` over three readiness cards keyed on a property that is `undefined` until mount, giving three identical keys and no output at all. The Prepare page rendered its heading and nothing else. Written out explicitly instead.
+
+**The Prepare screen now says the useful thing.** On a machine with no adapter it reports "WebGPU is present but this device offers no GPU adapter" and then says the app will answer from its keyword rules and that they work offline. It does not pretend a model is coming.
+
+**The field test will not show the model.** It will show keyword mode answering "show me Vega" and "is Mars up" correctly with the server gone. That is a real, working, fully offline product. It is not the demo the spec set out to build, and it is worth saying that plainly rather than letting the screenshots imply otherwise.

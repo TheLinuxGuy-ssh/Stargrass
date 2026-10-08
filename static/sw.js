@@ -10,14 +10,20 @@
 
 const CACHE = 'stargrass-v1';
 
-const PRECACHE = ['/', '/index.html', '/manifest.webmanifest'];
+const PRECACHE = ['/', '/index.html', '/prepare.html', '/manifest.webmanifest'];
 
 self.addEventListener('install', (event) => {
 	event.waitUntil(
-		caches
-			.open(CACHE)
-			.then((cache) => cache.addAll(PRECACHE))
-			.then(() => self.skipWaiting())
+		caches.open(CACHE).then((cache) =>
+			// addAll rejects as a group, so one wrong path would leave the app
+			// with no cache at all. Add each entry on its own and let a missing
+			// one fail quietly.
+			Promise.all(
+				PRECACHE.map((url) =>
+					cache.match(url).then((hit) => (hit !== undefined ? undefined : cache.add(url).catch(() => undefined)))
+				)
+			).then(() => self.skipWaiting())
+		)
 	);
 });
 

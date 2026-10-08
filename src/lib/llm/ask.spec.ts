@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { ask } from './ask.js';
+import { parseToolCall } from '#lib/sky/types';
 import { compassMatches, directionFrom, routeByKeyword } from './fallback.js';
 import {
 	findObjectTemplate,
@@ -184,15 +185,120 @@ describe('routing star names', () => {
 });
 
 describe('answering about stars', () => {
-	it('answers a star question from the tool', () => {
-		const answer = ask('where is Betelgeuse', DELHI, FIXTURE_TIME);
+	it('answers a star question from the tool', async () => {
+		const answer = await ask('where is Betelgeuse', DELHI, FIXTURE_TIME);
 		expect(answer.tool).toBe('find_object');
 		expect(answer.text).toContain('Betelgeuse');
 		expect(answer.text.length).toBeGreaterThan(0);
 	});
 
-	it('says it does not know an unknown object', () => {
-		const answer = ask('show me Betelguse', DELHI, FIXTURE_TIME);
+	it('says it does not know an unknown object', async () => {
+		const answer = await ask('show me Betelguse', DELHI, FIXTURE_TIME);
 		expect(answer.text).toBe('I can only answer questions about tonight, the moon, and what is up in the sky.');
+	});
+});
+
+describe('parseToolCall guards against a bad model reply', () => {
+	it('rejects nothing at all', () => {
+		expect(parseToolCall(null)).toBeNull();
+		expect(parseToolCall(undefined)).toBeNull();
+		expect(parseToolCall('tonight')).toBeNull();
+		expect(parseToolCall(42)).toBeNull();
+	});
+
+	it('rejects a tool it has never heard of', () => {
+		expect(parseToolCall({ tool: 'divine', args: {} })).toBeNull();
+		expect(parseToolCall({ tool: '', args: {} })).toBeNull();
+		expect(parseToolCall({ args: {} })).toBeNull();
+	});
+
+	it('accepts a well formed call', () => {
+		expect(parseToolCall({ tool: 'moon', args: {} })).toEqual({ tool: 'moon', args: {} });
+		expect(parseToolCall({ tool: 'tonight', args: {} })).toEqual({ tool: 'tonight', args: {} });
+		expect(parseToolCall({ tool: 'none', args: {} })).toEqual({ tool: 'none', args: {} });
+	});
+
+	it('accepts find_object only with a real name', () => {
+		expect(parseToolCall({ tool: 'find_object', args: { name: 'Vega' } })).toEqual({
+			tool: 'find_object',
+			args: { name: 'Vega' }
+		});
+		expect(parseToolCall({ tool: 'find_object', args: { name: '   ' } })).toBeNull();
+		expect(parseToolCall({ tool: 'find_object', args: {} })).toBeNull();
+	});
+
+	it('drops rubbish fields on whats_up instead of trusting them', () => {
+		expect(
+			parseToolCall({ tool: 'whats_up', args: { direction: 'E', minAltitude: 'high' } })
+		).toEqual({ tool: 'whats_up', args: { direction: 'E' } });
+		expect(parseToolCall({ tool: 'whats_up', args: {} })).toEqual({ tool: 'whats_up', args: {} });
+		expect(parseToolCall({ tool: 'whats_up' })).toEqual({ tool: 'whats_up', args: {} });
+	});
+
+	it('survives an entirely missing args object', () => {
+		expect(parseToolCall({ tool: 'moon' })).toEqual({ tool: 'moon', args: {} });
+	});
+});
+
+describe('model path degrades to the templates', () => {
+	const model = (route: () => Promise<never>) => ({
+		route,
+		narrate: async () => null
+	});
+
+	it('uses the keyword router when the model cannot route', async () => {
+		const answer = await ask(
+			'how dark is it tonight',
+			DELHI,
+			FIXTURE_TIME,
+			model(async () => {
+				throw new Error('engine lost');
+			})
+		);
+		expect(answer.mode).toBe('fallback');
+		expect(answer.tool).toBe('tonight');
+		expect(answer.text).toContain('07:19 PM');
+	});
+
+	it('uses the template wording when narration returns nothing', async () => {
+		const answer = await ask(
+			'how dark is it tonight',
+			DELHI,
+			FIXTURE_TIME,
+			{
+				route: async () => ({ tool: 'tonight', args: {} }),
+				narrate: async () => null
+			}
+		);
+		expect(answer.mode).toBe('fallback');
+		expect(answer.text).toContain('9h 39m');
+	});
+
+	it('uses the model wording when narration succeeds', async () => {
+		const answer = await ask(
+			'how dark is it tonight',
+			DELHI,
+			FIXTURE_TIME,
+			{
+				route: async () => ({ tool: 'tonight', args: {} }),
+				narrate: async () => 'Darkness starts at 7:19.'
+			}
+		);
+		expect(answer.mode).toBe('model');
+		expect(answer.text).toBe('Darkness starts at 7:19.');
+	});
+
+	it('falls back to keywords when the model routes to an unusable tool', async () => {
+		const answer = await ask(
+			'show me Vega',
+			DELHI,
+			FIXTURE_TIME,
+			{
+				route: async () => null,
+				narrate: async () => 'should not be used'
+			}
+		);
+		expect(answer.tool).toBe('find_object');
+		expect(answer.text).toContain('Vega');
 	});
 });

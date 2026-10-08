@@ -53,6 +53,22 @@ export async function prepareOffline(): Promise<OfflineState> {
 	}
 }
 
+/** How many files the app has saved for offline use. Zero means not yet. */
+export async function cacheCount(): Promise<number> {
+	if (typeof caches === 'undefined') return 0;
+	try {
+		const keys = await caches.keys();
+		let total = 0;
+		for (const key of keys) {
+			const cache = await caches.open(key);
+			total += (await cache.keys()).length;
+		}
+		return total;
+	} catch {
+		return 0;
+	}
+}
+
 /** Resolves once the named URLs are readable from the cache. */
 async function confirmCached(urls: string[]): Promise<void> {
 	const missing = urls.filter((url) => url.startsWith(location.origin));
