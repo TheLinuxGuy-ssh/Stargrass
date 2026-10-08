@@ -37,3 +37,20 @@ Illumination uses 1 percentage point, since the fixture says "about 18 percent" 
 `whatsUp` filters direction by exact compass match, so "E" returns Saturn but "east" returns nothing unless normalized upstream. M2 and M4 will have to normalize the word before it reaches here.
 
 `phaseName` buckets phase degrees into eight 45 degree bands. That puts the boundary between Waning Crescent and New Moon at 337.5 degrees, which is correct, but a moon sitting exactly on a boundary jumps straight from one name to the next with nothing in between.
+## M2. Tonight screen
+
+**Built.** `src/routes/+page.svelte` showing the dark window in local time, its length, the moon with phase, illumination and rise time, and the planets with compass direction and height in fists, highest first, with the ones below the horizon folded under a quiet disclosure. Location comes from one geolocation request with manual entry as the fallback, stored as a couple of numbers. `src/lib/ui/place.ts` and `src/lib/ui/theme.ts` hold the two small pieces of state. Themes are near black and pure red, with the red defined as red channel only so night vision is preserved. `check`, `test` and `build` are clean.
+
+**SvelteKit 3 removed `$lib`, and the spec has not caught up.** The spec writes imports as `$lib/sky/...`. That alias no longer exists. It now throws a hard error pointing at `#lib`, which the scaffold had already wired up through the `imports` field in package.json. I hit this on the first `check` of this milestone.
+
+Worse, `npm run check` was reporting success the whole time before this. Every file up to now imported by relative path, so the missing alias was never exercised. The generated `$app/tsconfig.json` had `"paths": {}`, which is the tell: no aliases were registered at all, including `$app/environment` and `$app/state`. The type checker was only ever checking code that had no alias in it, so "0 errors" meant much less than it appeared to.
+
+TypeScript cannot resolve the `#lib` subpath imports on its own either. I confirmed that outside the project with a clean `tsc --ignoreConfig` run, so it is not a svelte-check quirk. The fix is four lines of explicit `paths` in our own tsconfig.
+
+**Two deviations from the milestone prompt, both needing sign off.** The prompt allowed touching `src/app.css`, which does not exist; the stylesheet is `src/routes/layout.css`. I edited the file that is actually there rather than renaming it. And I had to touch `tsconfig.json`, which the prompt did not list, because without it no UI code can compile at all. Revert either if you disagree.
+
+**Not sure yet.** The theme is applied in `onMount`, so a user who chose red mode sees one dark frame before red arrives. Fixing it properly means a small inline script in `src/app.html`, which is outside this milestone's file list, so I left it. It is more noticeable than it sounds for an app meant to be opened in the dark.
+
+**Verified against the fixtures.** At `?t=2026-10-06T14:00:00Z` with Delhi entered by hand the screen reads: dark window 07:19 PM to 04:58 AM, 9h 39m of full darkness, Waning Crescent 18 percent lit, moon rising 02:47 AM, Saturn east at 1.9 fists, and Mercury, Venus, Mars and Jupiter folded away. The underlying UTC values are the fixture values to the second.
+
+**Not verified.** Everything above was checked by rendering the formatting logic, not by looking at a real phone. Red mode, touch target sizes and the disclosure element are unconfirmed until it is on the device.

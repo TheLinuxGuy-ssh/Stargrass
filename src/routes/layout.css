@@ -1,1 +1,71 @@
 @import 'tailwindcss';
+
+/*
+ * Two themes only. Night vision mode is pure red on black with no other hue,
+ * because red light preserves dark adaptation.
+ *
+ * The dark theme is near black with low contrast text. Nothing here is a
+ * bright white, so the screen never blows out a dark adapted eye.
+ */
+@theme {
+	--color-bg: #07090c;
+	--color-surface: #0e1116;
+	--color-line: #1c222b;
+	--color-ink: #9aa4b2;
+	--color-ink-dim: #626b78;
+	--color-ink-bright: #aeb6c2;
+	--color-accent: #7d8fa8;
+
+	--color-r-bg: #000000;
+	--color-r-surface: #120000;
+	--color-r-line: #2a0606;
+	--color-r-ink: #cc3333;
+	--color-r-ink-dim: #7a1f1f;
+	--color-r-ink-bright: #e64a4a;
+	--color-r-accent: #b32d2d;
+}
+
+@layer base {
+	:root {
+		--bg: var(--color-bg);
+		--surface: var(--color-surface);
+		--line: var(--color-line);
+		--ink: var(--color-ink);
+		--ink-dim: var(--color-ink-dim);
+		--ink-bright: var(--color-ink-bright);
+		--accent: var(--color-accent);
+		color-scheme: dark;
+	}
+
+	:root[data-theme='red'] {
+		--bg: var(--color-r-bg);
+		--surface: var(--color-r-surface);
+		--line: var(--color-r-line);
+		--ink: var(--color-r-ink);
+		--ink-dim: var(--color-r-ink-dim);
+		--ink-bright: var(--color-r-ink-bright);
+		--accent: var(--color-r-accent);
+	}
+
+	html {
+		background-color: var(--bg);
+	}
+
+	body {
+		margin: 0;
+		background-color: var(--bg);
+		color: var(--ink);
+		font-family:
+			system-ui,
+			-apple-system,
+			'Segoe UI',
+			sans-serif;
+		-webkit-text-size-adjust: 100%;
+	}
+
+	button,
+	input {
+		font: inherit;
+		color: inherit;
+	}
+}
