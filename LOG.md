@@ -14,6 +14,10 @@ Printed the Gemma builds that the installed `@mlc-ai/web-llm` version actually s
 
 One thing the spec did not anticipate: `gemma3-1b-it` only ships a `q4f16_1` build. There is no `q4f32_1` for the 1B model. If the phone reports no `shader-f16`, the smallest build that still runs is the 2B `q4f32_1` at 2509 MB of VRAM. So the fallback costs more memory than the model it replaces, which decides the plan more sharply than the spec assumed.
 
+**A later correction to the paragraph above, found while preparing M3.** Every `q4f16_1` build in the prebuilt list declares `required_features: ["shader-f16"]`, which is how WebLLM decides a model is unloadable on a given device. `gemma3-1b-it-q4f16_1-MLC` alone declares `null`. That is a registry bug: the build is half precision and needs the feature, but its manifest entry forgets to say so.
+
+This matters in both directions. On a phone with `shader-f16`, `gemma3-1b-it` at 711 MB is by far the best choice and its manifest is merely misleading. On a phone without it, WebLLM will not skip the model, because nothing in the registry says to. It will attempt the load and fail inside shader compilation, which produces a confusing error instead of a clean fallback. So "pick the smallest Gemma instruct entry", which is what the spec says to do, lands on precisely the model that fails worst on the devices that need the fallback. `webgpu.ts` has to detect `shader-f16` itself and treat `gemma3-1b-it` as f16 regardless of what its manifest claims.
+
 **Still open.** No phone check yet. WebGPU and `shader-f16` support are unverified, and that decides whether M3 uses the `q4f16_1` or `q4f32_1` Gemma build.## M1. Sky core
 
 **Built.** `src/lib/sky/` as pure TypeScript with no UI imports: `observer.ts`, `bodies.ts`, `twilight.ts`, `moon.ts`, `format.ts`, `tools.ts`, plus 27 Vitest tests in `sky.spec.ts`. Every row of the section 5 fixture table has a test. All pass, and `check` and `build` are clean.

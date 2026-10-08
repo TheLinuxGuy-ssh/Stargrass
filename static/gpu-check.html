@@ -1,0 +1,151 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<title>Stargrass GPU check</title>
+		<style>
+			:root { color-scheme: dark; }
+			body {
+				margin: 0;
+				padding: 1.25rem;
+				background: #07090c;
+				color: #aeb6c2;
+				font-family: system-ui, sans-serif;
+				line-height: 1.5;
+			}
+			h1 { font-size: 1.1rem; color: #aeb6c2; margin: 0 0 1rem; }
+			pre {
+				background: #0e1116;
+				border: 1px solid #1c222b;
+				border-radius: 0.5rem;
+				padding: 0.875rem;
+				white-space: pre-wrap;
+				word-break: break-word;
+				font-size: 0.85rem;
+				margin: 0;
+			}
+		</style>
+	</head>
+	<body>
+		<h1>Stargrass GPU check</h1>
+		<pre id="out">running...</pre>
+		<script type="module">
+			const lines = [];
+			const say = (label, value) => lines.push(label.padEnd(26) + value);
+
+			try {
+				say('isSecureContext', String(window.isSecureContext));
+				say('origin', window.location.origin);
+				if (!window.isSecureContext) {
+					say('', '');
+					say('verdict', 'NOT A SECURE CONTEXT. WebGPU is');
+					say('', 'hidden here by design, so this result');
+					say('', 'is meaningless. Open over HTTPS.');
+					lines.push('A LAN address over plain http will always');
+					lines.push('report ABSENT. Use the deployed https URL.');
+				} else {
+					say('navigator.gpu', navigator.gpu ? 'present' : 'ABSENT');
+				}
+
+				if (!window.isSecureContext) {
+					// Nothing below can be trusted on an insecure origin.
+				} else if (!navigator.gpu) {
+					say('verdict', 'NO WEBGPU on this device.');
+					say('', 'Model path is dead here. Fallback');
+					say('', 'routing becomes the primary path.');
+				} else {
+					let adapter = await navigator.gpu.requestAdapter({ powerPreference: 'high-performance' });
+					if (!adapter) adapter = await navigator.gpu.requestAdapter();
+					say('requestAdapter', adapter ? 'ok' : 'RETURNED NULL');
+
+					if (adapter) {
+						// isFallbackAdapter is deprecated but still the clearest fallback signal.
+						say('isFallbackAdapter', String(adapter.isFallbackAdapter));
+
+						const info = adapter.info ?? (adapter.requestAdapterInfo ? await adapter.requestAdapterInfo() : null);
+						if (info) {
+							say('vendor', info.vendor || '(empty)');
+							say('architecture', info.architecture || '(empty)');
+							say('device', info.device || '(empty)');
+							say('description', info.description || '(empty)');
+						} else {
+							say('adapter info', 'not exposed by this browser');
+						}
+
+						const features = [...adapter.features].sort();
+						say('feature count', String(features.length));
+						say('shader-f16 listed', adapter.features.has('shader-f16') ? 'YES' : 'no');
+						say('all features', features.join(', ') || '(none)');
+
+						say('maxBufferSize', String(adapter.limits.maxBufferSize));
+						say('maxStorageBuffer', String(adapter.limits.maxStorageBufferBindingSize));
+
+						// The decisive test: a device can only be created with shader-f16
+						// if the adapter really has it. This is not a listing, it is a grant.
+						let device = null;
+						try {
+							device = await adapter.requestDevice({ requiredFeatures: ['shader-f16'] });
+							say('device WITH f16', 'GRANTED');
+						} catch (error) {
+							say('device WITH f16', 'REFUSED: ' + error.message);
+						}
+
+						if (!device) {
+							try {
+								device = await adapter.requestDevice();
+								say('device plain', 'ok');
+							} catch (error) {
+								say('device plain', 'FAILED: ' + error.message);
+							}
+						}
+
+						if (device) {
+							say('device has f16', device.features.has('shader-f16') ? 'YES' : 'no');
+
+							// A compute shader proves the GPU can actually run kernels,
+							// which a software rasterizer would technically also do but slowly.
+							try {
+								const module = device.createShaderModule({
+									code: '@compute @workgroup_size(1) fn main() { let x = 1.0; }'
+								});
+								const pipeline = await device.createComputePipelineAsync({ layout: 'auto', compute: { module, entryPoint: 'main' } });
+								const enc = device.createCommandEncoder();
+								const pass = enc.beginComputePass();
+								pass.setPipeline(pipeline);
+								pass.dispatchWorkgroups(1);
+								pass.end();
+								await device.queue.submit([enc.finish()]);
+								await device.queue.onSubmittedWorkDone();
+								say('compute shader', 'RAN OK');
+							} catch (error) {
+								say('compute shader', 'FAILED: ' + error.message);
+							}
+
+							try {
+								const mod = device.createShaderModule({ code: '@compute @workgroup_size(1) fn main() { let x = f16(1.0); }' });
+								await mod.getCompilationInfo();
+								say('f16 shader compiles', 'YES');
+							} catch (error) {
+								say('f16 shader compiles', 'NO: ' + error.message);
+							}
+
+							say('navigator.storage.persist', typeof navigator.storage?.persist === 'function' ? 'available' : 'missing');
+							const est = await navigator.storage?.estimate?.();
+							if (est) say('storage quota GB', (est.quota / 1e9).toFixed(1));
+
+							const f16 = device.features.has('shader-f16');
+							say('', '');
+							say('MODEL TO LOAD', f16 ? 'gemma3-1b-it-q4f16_1-MLC (711 MB)' : 'gemma-2-2b-it-q4f32_1-MLC (2509 MB)');
+						}
+					}
+				}
+			} catch (error) {
+				say('FATAL', error.message);
+			}
+
+			document.getElementById('out').textContent = lines.join('\n');
+			window.__result = lines.join('\n');
+		</script>
+	</body>
+</html>
