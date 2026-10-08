@@ -1,4 +1,4 @@
-import { compass, fists, formatDuration, formatLocalTime } from '#lib/sky/format';
+import { fists, formatDuration, formatLocalTime } from '#lib/sky/format';
 import type { FindObjectResult, SkyObject, TonightResult } from '#lib/sky/tools';
 
 /**
@@ -14,7 +14,8 @@ function phraseAltitude(object: SkyObject): string {
 }
 
 function phraseObject(object: SkyObject): string {
-	return `${object.name} is ${compass(object.azimuth)} and ${phraseAltitude(object)}`;
+	const where = object.aboveHorizon ? `${directionName(object.compass)}, ${phraseAltitude(object)}` : 'below the horizon';
+	return `${object.name} is ${where}`;
 }
 
 export function tonightTemplate(result: TonightResult, timeZone?: string): string {
@@ -53,15 +54,19 @@ export function whatsUpTemplate(objects: SkyObject[], direction?: string): strin
 			: `Nothing is up to the ${directionName(direction)}.`;
 	}
 
-	const listed = objects
+	// Decimals like 6.1 would read as sentence breaks, so keep heights whole.
+	const described = objects
 		.slice(0, 3)
-		.map((object) => `${object.name} (${compass(object.azimuth)}, ${fists(object.altitude)} fists)`)
-		.join('; ');
+		.map((object) => `${object.name} ${directionName(object.compass)} at ${fists(object.altitude)} fists`)
+		.join(', ');
 
 	const tail = objects.length > 3 ? `, and ${objects.length - 3} more` : '';
-	const lead = direction === undefined ? 'Right now you should see' : `Looking ${directionName(direction)} you should see`;
+	const lead =
+		direction === undefined
+			? 'Right now you can see'
+			: `Looking ${directionName(direction)} you can see`;
 
-	return `${lead} ${listed}${tail}.`;
+	return `${lead} ${described}${tail}.`;
 }
 
 /** Turns 'E' or 'east' into something readable in a sentence. */

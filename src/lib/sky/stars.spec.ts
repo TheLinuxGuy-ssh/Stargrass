@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { observerFor, type Place } from './observer.js';
 import { STARS, findStar, starPosition, starRiseSet } from './stars.js';
 import { findObject, whatsUp } from './tools.js';
+import { twilight } from './twilight.js';
 
 const DELHI: Place = { lat: 28.6139, lon: 77.209, elevation: 216 };
 const FIXTURE_TIME = new Date('2026-10-06T14:00:00Z');
@@ -164,5 +165,46 @@ describe('whatsUp includes stars', () => {
 		expect(altitude).toBeGreaterThan(0);
 		const vega = findObject(DELHI, FIXTURE_TIME, 'Vega');
 		expect(vega.found && vega.compass).toBe('NW');
+	});
+});
+describe('twilight holds up across a whole day', () => {
+	const obs = observerFor(DELHI);
+
+	it('returns the same night at every hour after dusk', () => {
+		const hours = ['2026-10-06T14:00:00Z', '2026-10-06T16:00:00Z', '2026-10-06T18:00:00Z', '2026-10-06T22:00:00Z', '2026-10-07T00:30:00Z'];
+		const results = hours.map((h) => twilight(obs, new Date(h)));
+
+		for (const result of results) {
+			// Each call re-searches from its own anchor, so the crossing lands
+			// a few milliseconds apart. One minute of tolerance still proves
+			// the same night was chosen rather than a neighbouring one.
+			expect(Math.abs(new Date(result.duskUtc as string).getTime() - new Date(results[0].duskUtc as string).getTime()))
+				.toBeLessThanOrEqual(60_000);
+			expect(Math.abs(new Date(result.dawnUtc as string).getTime() - new Date(results[0].dawnUtc as string).getTime()))
+				.toBeLessThanOrEqual(60_000);
+		}
+	});
+
+	it('returns the previous night when asked before dusk', () => {
+		const before = twilight(obs, new Date('2026-10-06T02:00:00Z'));
+		const after = twilight(obs, new Date('2026-10-06T14:00:00Z'));
+		// 02:00Z on the 6th belongs to the night that began on the 5th.
+		expect(before.duskUtc).not.toBe(after.duskUtc);
+		expect(new Date(before.duskUtc as string).getTime()).toBeLessThan(
+			new Date(before.dawnUtc as string).getTime()
+		);
+	});
+
+	it('always reports dawn after dusk', () => {
+		for (const h of ['2026-10-06T02:00:00Z','2026-10-06T12:00:00Z','2026-10-06T18:00:00Z','2026-10-07T02:00:00Z']) {
+			const r = twilight(obs, new Date(h));
+			expect(new Date(r.dawnUtc as string).getTime()).toBeGreaterThan(new Date(r.duskUtc as string).getTime());
+		}
+	});
+
+	it('reports no darkness during polar night', () => {
+		const polar = observerFor({ lat: 85, lon: 20, elevation: 0 });
+		const r = twilight(polar, new Date('2026-12-21T12:00:00Z'));
+		expect(r.darkMinutes).toBeNull();
 	});
 });

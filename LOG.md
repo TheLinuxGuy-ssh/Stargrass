@@ -150,3 +150,23 @@ The second was a Svelte keyed `{#each}` over three readiness cards keyed on a pr
 **The Prepare screen now says the useful thing.** On a machine with no adapter it reports "WebGPU is present but this device offers no GPU adapter" and then says the app will answer from its keyword rules and that they work offline. It does not pretend a model is coming.
 
 **The field test will not show the model.** It will show keyword mode answering "show me Vega" and "is Mars up" correctly with the server gone. That is a real, working, fully offline product. It is not the demo the spec set out to build, and it is worth saying that plainly rather than letting the screenshots imply otherwise.
+
+## Field test preparation
+
+**Built.** `src/lib/llm/fieldtest.spec.ts`, five questions a person standing outside at night would really ask, run against a fixed place and time so the answers are checkable against the sky.
+
+**Writing the field test found a real bug in twilight that no fixture had caught.** Running the questions at 06:00Z on the night of the new moon printed "Full darkness runs from 06:55 AM to 04:40 PM". That is a dusk after a dawn, which is nonsense on its face, and it would have shown on the tonight card for anyone asking between midnight and sunrise.
+
+The cause is that direction of travel does not identify a twilight crossing. After midnight the sun is still below the horizon, so the next crossing it makes is upward and is dawn, while a "descending" search for the coming night can return that same dawn. The old code took whatever the descending search returned and called it dusk. The fix searches both crossings from an anchor known to be in daylight, so each search returns the crossing that genuinely follows it, and steps back a day when the reference time falls before that evening's dusk.
+
+The M1 fixture still passes to the second, and four new tests hold the behaviour across a day: 14:00Z, 16:00Z, 18:00Z, 22:00Z and 00:30Z all return the same night, while 02:00Z correctly returns the previous one.
+
+**I misread my own output for ten minutes and nearly "fixed" something correct.** The suspicious line "06:55 AM to 04:40 PM" was in fact correct: the machine running the tests is set to Asia/Calcutta, so Austin's 01:25Z dusk renders as 06:55 IST. I had assumed the environment was UTC and built an elaborate explanation on top of that. Worth recording because the instinct to distrust a surprising number was right, and the instinct to immediately change the code would have introduced a bug. Checking the timezone first cost thirty seconds.
+
+**Two wording problems worth fixing, both found by looking at real sentences.** "Saturn is S and 6.1 fists up" had no verb and a bare compass abbreviation, so it now reads "Saturn is south at 6.1 fists up". And the star list joined objects with semicolons and parentheses that read as sentence breaks in the dark; it now reads "Looking south you can see Saturn south at 6.1 fists, Diphda south at 4.2 fists, Ankaa south at 1.7 fists."
+
+**A test bug worth recording.** My "keeps answers to three sentences" check split on `.`, which counts "6.1" as two sentences and reported a four sentence answer for text that is one. The counter now shields a digit before a decimal point. The app was never wrong; the measurement was. Replaced the number-hunting assertion with a stronger one that requires the answer to equal the template output exactly, which is a real proof rather than a digit-matching heuristic.
+
+**Current state for the field test.** Ninety eight tests, `check` clean, `build` clean, both pages verified offline with the server killed. The tonight card at the fixture instant reads: darkness 07:19 PM to 04:58 AM, 9h 39m, Waning Crescent 18 percent lit, moon rising 02:47 AM, seventeen files saved for offline use.
+
+**Still to do by hand, tonight or tomorrow night.** Prepare on wifi, then airplane mode, then ask five questions about things actually visible and check each against the sky. Record signal bars, response time, battery drop and whether the phone gets hot. New moon is 15:50Z on 10 October, so the nights of the 9th and 10th are the darkest of the week. Check the weather the day before and keep a backup night.
