@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest';
+import { ask } from './ask.js';
 import { compassMatches, directionFrom, routeByKeyword } from './fallback.js';
 import {
 	findObjectTemplate,
@@ -120,8 +121,8 @@ describe('templates', () => {
 	});
 
 	it('names an unknown object rather than guessing', () => {
-		expect(findObjectTemplate(findObject(DELHI, FIXTURE_TIME, 'Betelgeuse'))).toBe(
-			'I do not know an object called Betelgeuse.'
+		expect(findObjectTemplate(findObject(DELHI, FIXTURE_TIME, 'Picard'))).toBe(
+			'I do not know an object called Picard.'
 		);
 	});
 
@@ -151,12 +152,47 @@ describe('templates', () => {
 });
 
 describe('what is up output', () => {
-	it('lists Saturn at fixture time', () => {
+	it('lists Saturn as the only planet up at fixture time', () => {
 		const up = whatsUp(DELHI, FIXTURE_TIME);
-		expect(up.map((o) => o.name)).toEqual(['Saturn']);
+		expect(up.filter((o) => o.kind === 'planet').map((o) => o.name)).toEqual(['Saturn']);
 	});
 
 	it('filters by a requested direction', () => {
-		expect(whatsUp(DELHI, FIXTURE_TIME, { direction: 'W' })).toHaveLength(0);
+		const west = whatsUp(DELHI, FIXTURE_TIME, { direction: 'W' });
+		expect(west.every((o) => o.compass === 'W')).toBe(true);
+		expect(west.map((o) => o.name)).toContain('Rasalgethi');
+	});
+});
+describe('routing star names', () => {
+	it('routes a named star to find_object', () => {
+		expect(routeByKeyword('show me Betelgeuse')).toEqual({
+			tool: 'find_object',
+			args: { name: 'Betelgeuse' }
+		});
+		expect(routeByKeyword('where is vega').tool).toBe('find_object');
+		expect(routeByKeyword('is polaris visible').tool).toBe('find_object');
+	});
+
+	it('routes a planet name still wins its own check', () => {
+		expect(routeByKeyword('is Mars up')).toEqual({ tool: 'find_object', args: { name: 'Mars' } });
+	});
+
+	it('does not invent a star that is not in the catalogue', () => {
+		expect(routeByKeyword('show me Betelguse')).toBeTruthy();
+		expect(routeByKeyword('show me Betelguse').tool).toBe('none');
+	});
+});
+
+describe('answering about stars', () => {
+	it('answers a star question from the tool', () => {
+		const answer = ask('where is Betelgeuse', DELHI, FIXTURE_TIME);
+		expect(answer.tool).toBe('find_object');
+		expect(answer.text).toContain('Betelgeuse');
+		expect(answer.text.length).toBeGreaterThan(0);
+	});
+
+	it('says it does not know an unknown object', () => {
+		const answer = ask('show me Betelguse', DELHI, FIXTURE_TIME);
+		expect(answer.text).toBe('I can only answer questions about tonight, the moon, and what is up in the sky.');
 	});
 });

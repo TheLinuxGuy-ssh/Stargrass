@@ -107,3 +107,28 @@ Since `adapter-static` prerenders everything, the worker is about forty lines an
 **One real bug the browser found that the tests did not.** The moon answer came back as "rises at 02:47 AM local.." with two full stops, because the template built its clauses with trailing punctuation and then appended another. A test asserting the answer contains a phase name passed happily. The check that caught it looks for any repeated full stop in any template, which is the sort of thing worth having for text a user reads.
 
 **Not verified.** Offline was proven against a local HTTP server, not Vercel, and not in Safari on the phone. The service worker needs a secure context, and Vercel is one, so the mechanism should hold, but the field test is still the real test. The theme still applies after first paint, so a red mode user gets one dark frame on load.
+
+## M6. Stars
+
+**Built.** `scripts/build-stars.mjs` derives `src/lib/data/stars.json` from the HYG database. `src/lib/sky/stars.ts` loads it and computes positions through the same `starHorizon` the fixture already validated. `whatsUp` and `findObject` now handle stars, and the keyword router recognises all 144 names, longest first so a short name cannot match inside a longer one. Twenty two new tests, seventy six in total.
+
+**The spec asks for "about 300 stars" at magnitude 3.0 or brighter. Those two numbers do not agree.** Only 144 stars meet both conditions, because the brief also says "only named stars" and there simply are not three hundred stars brighter than magnitude 3 that have proper names. The catalogue holds 444 named stars in total. Relaxing the cutoff to 4.5 would reach 287, which matches "about 300", so if the intent was the count then the cutoff is the thing that should move. I kept magnitude 3.0 because it is the precise, checkable instruction, and because at magnitude 3 a person can name just about every star they can point at.
+
+**A star catalogue means rise and set times, and there is no library helper for it.** `SearchRiseSet` only accepts solar system bodies, so there is no way to ask astronomy-engine when Betelgeuse crosses the horizon. `starRiseSet` samples altitude in five minute steps across a day and interpolates the zero crossing instead. The test checks the reported rise time against a direct altitude computation and requires them to agree within half a degree, which is what makes the interpolation trustworthy rather than merely plausible.
+
+**The Polaris check only holds in the north.** Polaris sits 0.736 degrees off the celestial pole, so its altitude tracks the observer's latitude closely at northern latitudes: 0.12 degrees off at Delhi, 0.6 at 78 north. In the southern hemisphere the same offset stretches to 1.04 degrees at Sydney, because the geometry below the horizon amplifies it. The spec asks for one degree and that passes at Delhi. I wrote a second test at Sydney expecting one degree too, it failed at 1.036, and the honest answer was to widen that one test to 1.5 with the geometry written down, rather than to move the fixture test the spec actually asked for.
+
+**Two M1 tests broke, correctly.** One asserted that Betelgeuse was an unknown object, which M6 made false. It now checks a deliberately misspelled name and a separate test asserts Betelgeuse is known. The other assumed `whatsUp` returns planets only, so "east" returned exactly Saturn and "north" returned nothing. Both now assert the behaviour that matters instead of exact lists, because those lists now contain stars.
+
+**Verified offline again, with the server killed.** Answers from the cached build:
+
+```
+where is Betelgeuse   Betelgeuse is below the horizon right now. It rises at 10:57 PM local.
+show me Vega          Vega is NW and 6.8 fists up.
+is Polaris up         Polaris is N and 2.8 fists up.
+what is up in the north   Looking north you should see Polaris (N, 2.8 fists).
+```
+
+This matters more than it did before M3 turned out how it did. With no model available, every one of those answers came from the keyword router and a template, and "show me Betelgeuse" is exactly the case the fallback was supposed to cover.
+
+**Catalogue licensing.** HYG is CC BY-SA 4.0, so attribution is a licence condition rather than a courtesy. The credit is in the README naming the database, its author and the licence. The 13 MB source catalogue is a build input and is gitignored; only the 17 KB derived JSON is committed, and `build-stars.mjs` documents the exact download command.

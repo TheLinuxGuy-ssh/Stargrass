@@ -21,3 +21,8 @@ Thumbs.db
 # Vite
 vite.config.js.timestamp-*
 vite.config.ts.timestamp-*
+
+# Star catalogue build input. Fetched by scripts/build-stars.mjs; only the
+# derived src/lib/data/stars.json is committed.
+/scripts/data/*.csv
+/scripts/data/*.csv.gz

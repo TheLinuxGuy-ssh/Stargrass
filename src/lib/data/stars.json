@@ -1,0 +1,1010 @@
+[
+	{
+		"name": "Sirius",
+		"constellation": "CMa",
+		"raHours": 6.75248,
+		"decDeg": -16.71612,
+		"magnitude": -1.44
+	},
+	{
+		"name": "Canopus",
+		"constellation": "Car",
+		"raHours": 6.3992,
+		"decDeg": -52.69566,
+		"magnitude": -0.62
+	},
+	{
+		"name": "Arcturus",
+		"constellation": "Boo",
+		"raHours": 14.26103,
+		"decDeg": 19.18241,
+		"magnitude": -0.05
+	},
+	{
+		"name": "Rigil Kentaurus",
+		"constellation": "Cen",
+		"raHours": 14.66077,
+		"decDeg": -60.83398,
+		"magnitude": -0.01
+	},
+	{
+		"name": "Vega",
+		"constellation": "Lyr",
+		"raHours": 18.61564,
+		"decDeg": 38.78369,
+		"magnitude": 0.03
+	},
+	{
+		"name": "Capella",
+		"constellation": "Aur",
+		"raHours": 5.27815,
+		"decDeg": 45.99799,
+		"magnitude": 0.08
+	},
+	{
+		"name": "Rigel",
+		"constellation": "Ori",
+		"raHours": 5.2423,
+		"decDeg": -8.20164,
+		"magnitude": 0.18
+	},
+	{
+		"name": "Procyon",
+		"constellation": "CMi",
+		"raHours": 7.65503,
+		"decDeg": 5.22499,
+		"magnitude": 0.4
+	},
+	{
+		"name": "Achernar",
+		"constellation": "Eri",
+		"raHours": 1.62856,
+		"decDeg": -57.23676,
+		"magnitude": 0.45
+	},
+	{
+		"name": "Betelgeuse",
+		"constellation": "Ori",
+		"raHours": 5.91953,
+		"decDeg": 7.40706,
+		"magnitude": 0.45
+	},
+	{
+		"name": "Hadar",
+		"constellation": "Cen",
+		"raHours": 14.06373,
+		"decDeg": -60.37304,
+		"magnitude": 0.61
+	},
+	{
+		"name": "Altair",
+		"constellation": "Aql",
+		"raHours": 19.84639,
+		"decDeg": 8.86832,
+		"magnitude": 0.76
+	},
+	{
+		"name": "Acrux",
+		"constellation": "Cru",
+		"raHours": 12.44331,
+		"decDeg": -63.09909,
+		"magnitude": 0.77
+	},
+	{
+		"name": "Aldebaran",
+		"constellation": "Tau",
+		"raHours": 4.59868,
+		"decDeg": 16.5093,
+		"magnitude": 0.87
+	},
+	{
+		"name": "Spica",
+		"constellation": "Vir",
+		"raHours": 13.41988,
+		"decDeg": -11.16132,
+		"magnitude": 0.98
+	},
+	{
+		"name": "Antares",
+		"constellation": "Sco",
+		"raHours": 16.49013,
+		"decDeg": -26.432,
+		"magnitude": 1.06
+	},
+	{
+		"name": "Pollux",
+		"constellation": "Gem",
+		"raHours": 7.75528,
+		"decDeg": 28.0262,
+		"magnitude": 1.16
+	},
+	{
+		"name": "Fomalhaut",
+		"constellation": "PsA",
+		"raHours": 22.96084,
+		"decDeg": -29.62224,
+		"magnitude": 1.17
+	},
+	{
+		"name": "Deneb",
+		"constellation": "Cyg",
+		"raHours": 20.69053,
+		"decDeg": 45.28034,
+		"magnitude": 1.25
+	},
+	{
+		"name": "Mimosa",
+		"constellation": "Cru",
+		"raHours": 12.79536,
+		"decDeg": -59.68876,
+		"magnitude": 1.25
+	},
+	{
+		"name": "Toliman",
+		"constellation": "Cen",
+		"raHours": 14.66035,
+		"decDeg": -60.8383,
+		"magnitude": 1.35
+	},
+	{
+		"name": "Regulus",
+		"constellation": "Leo",
+		"raHours": 10.13953,
+		"decDeg": 11.96721,
+		"magnitude": 1.36
+	},
+	{
+		"name": "Adhara",
+		"constellation": "CMa",
+		"raHours": 6.9771,
+		"decDeg": -28.97208,
+		"magnitude": 1.5
+	},
+	{
+		"name": "Castor",
+		"constellation": "Gem",
+		"raHours": 7.57663,
+		"decDeg": 31.88828,
+		"magnitude": 1.58
+	},
+	{
+		"name": "Gacrux",
+		"constellation": "Cru",
+		"raHours": 12.51943,
+		"decDeg": -57.11321,
+		"magnitude": 1.59
+	},
+	{
+		"name": "Shaula",
+		"constellation": "Sco",
+		"raHours": 17.56014,
+		"decDeg": -37.10382,
+		"magnitude": 1.62
+	},
+	{
+		"name": "Bellatrix",
+		"constellation": "Ori",
+		"raHours": 5.41885,
+		"decDeg": 6.3497,
+		"magnitude": 1.64
+	},
+	{
+		"name": "Elnath",
+		"constellation": "Tau",
+		"raHours": 5.4382,
+		"decDeg": 28.60745,
+		"magnitude": 1.65
+	},
+	{
+		"name": "Miaplacidus",
+		"constellation": "Car",
+		"raHours": 9.22004,
+		"decDeg": -69.71721,
+		"magnitude": 1.67
+	},
+	{
+		"name": "Alnilam",
+		"constellation": "Ori",
+		"raHours": 5.60356,
+		"decDeg": -1.20192,
+		"magnitude": 1.69
+	},
+	{
+		"name": "Alnair",
+		"constellation": "Gru",
+		"raHours": 22.13721,
+		"decDeg": -46.96097,
+		"magnitude": 1.73
+	},
+	{
+		"name": "Alnitak",
+		"constellation": "Ori",
+		"raHours": 5.67931,
+		"decDeg": -1.94257,
+		"magnitude": 1.74
+	},
+	{
+		"name": "Alioth",
+		"constellation": "UMa",
+		"raHours": 12.90047,
+		"decDeg": 55.95982,
+		"magnitude": 1.76
+	},
+	{
+		"name": "Kaus Australis",
+		"constellation": "Sgr",
+		"raHours": 18.40287,
+		"decDeg": -34.38462,
+		"magnitude": 1.79
+	},
+	{
+		"name": "Mirfak",
+		"constellation": "Per",
+		"raHours": 3.40538,
+		"decDeg": 49.86118,
+		"magnitude": 1.79
+	},
+	{
+		"name": "Dubhe",
+		"constellation": "UMa",
+		"raHours": 11.06216,
+		"decDeg": 61.75103,
+		"magnitude": 1.81
+	},
+	{
+		"name": "Wezen",
+		"constellation": "CMa",
+		"raHours": 7.13986,
+		"decDeg": -26.3932,
+		"magnitude": 1.83
+	},
+	{
+		"name": "Alkaid",
+		"constellation": "UMa",
+		"raHours": 13.79235,
+		"decDeg": 49.31327,
+		"magnitude": 1.85
+	},
+	{
+		"name": "Avior",
+		"constellation": "Car",
+		"raHours": 8.37524,
+		"decDeg": -59.50948,
+		"magnitude": 1.86
+	},
+	{
+		"name": "Sargas",
+		"constellation": "Sco",
+		"raHours": 17.62198,
+		"decDeg": -42.99782,
+		"magnitude": 1.86
+	},
+	{
+		"name": "Menkalinan",
+		"constellation": "Aur",
+		"raHours": 5.99215,
+		"decDeg": 44.94743,
+		"magnitude": 1.9
+	},
+	{
+		"name": "Atria",
+		"constellation": "TrA",
+		"raHours": 16.81108,
+		"decDeg": -69.02771,
+		"magnitude": 1.91
+	},
+	{
+		"name": "Alhena",
+		"constellation": "Gem",
+		"raHours": 6.62853,
+		"decDeg": 16.39925,
+		"magnitude": 1.93
+	},
+	{
+		"name": "Alsephina",
+		"constellation": "Vel",
+		"raHours": 8.74506,
+		"decDeg": -54.70882,
+		"magnitude": 1.93
+	},
+	{
+		"name": "Peacock",
+		"constellation": "Pav",
+		"raHours": 20.42746,
+		"decDeg": -56.73509,
+		"magnitude": 1.94
+	},
+	{
+		"name": "Polaris",
+		"constellation": "UMi",
+		"raHours": 2.52975,
+		"decDeg": 89.26411,
+		"magnitude": 1.97
+	},
+	{
+		"name": "Mirzam",
+		"constellation": "CMa",
+		"raHours": 6.37833,
+		"decDeg": -17.95592,
+		"magnitude": 1.98
+	},
+	{
+		"name": "Alphard",
+		"constellation": "Hya",
+		"raHours": 9.45979,
+		"decDeg": -8.6586,
+		"magnitude": 1.99
+	},
+	{
+		"name": "Algieba",
+		"constellation": "Leo",
+		"raHours": 10.33287,
+		"decDeg": 19.84149,
+		"magnitude": 2.01
+	},
+	{
+		"name": "Hamal",
+		"constellation": "Ari",
+		"raHours": 2.11956,
+		"decDeg": 23.46242,
+		"magnitude": 2.01
+	},
+	{
+		"name": "Diphda",
+		"constellation": "Cet",
+		"raHours": 0.72649,
+		"decDeg": -17.9866,
+		"magnitude": 2.04
+	},
+	{
+		"name": "Nunki",
+		"constellation": "Sgr",
+		"raHours": 18.92109,
+		"decDeg": -26.29672,
+		"magnitude": 2.05
+	},
+	{
+		"name": "Menkent",
+		"constellation": "Cen",
+		"raHours": 14.1114,
+		"decDeg": -36.36995,
+		"magnitude": 2.06
+	},
+	{
+		"name": "Alpheratz",
+		"constellation": "And",
+		"raHours": 0.13979,
+		"decDeg": 29.09043,
+		"magnitude": 2.07
+	},
+	{
+		"name": "Kochab",
+		"constellation": "UMi",
+		"raHours": 14.84511,
+		"decDeg": 74.15551,
+		"magnitude": 2.07
+	},
+	{
+		"name": "Mirach",
+		"constellation": "And",
+		"raHours": 1.16219,
+		"decDeg": 35.62056,
+		"magnitude": 2.07
+	},
+	{
+		"name": "Saiph",
+		"constellation": "Ori",
+		"raHours": 5.79594,
+		"decDeg": -9.66961,
+		"magnitude": 2.07
+	},
+	{
+		"name": "Tiaki",
+		"constellation": "Gru",
+		"raHours": 22.71112,
+		"decDeg": -46.88458,
+		"magnitude": 2.07
+	},
+	{
+		"name": "Rasalhague",
+		"constellation": "Oph",
+		"raHours": 17.58224,
+		"decDeg": 12.56004,
+		"magnitude": 2.08
+	},
+	{
+		"name": "Algol",
+		"constellation": "Per",
+		"raHours": 3.13615,
+		"decDeg": 40.95565,
+		"magnitude": 2.09
+	},
+	{
+		"name": "Almach",
+		"constellation": "And",
+		"raHours": 2.06498,
+		"decDeg": 42.32973,
+		"magnitude": 2.1
+	},
+	{
+		"name": "Denebola",
+		"constellation": "Leo",
+		"raHours": 11.81766,
+		"decDeg": 14.57206,
+		"magnitude": 2.14
+	},
+	{
+		"name": "Cih",
+		"constellation": "Cas",
+		"raHours": 0.94514,
+		"decDeg": 60.71674,
+		"magnitude": 2.15
+	},
+	{
+		"name": "Aspidiske",
+		"constellation": "Car",
+		"raHours": 9.28484,
+		"decDeg": -59.27523,
+		"magnitude": 2.21
+	},
+	{
+		"name": "Naos",
+		"constellation": "Pup",
+		"raHours": 8.05974,
+		"decDeg": -40.00315,
+		"magnitude": 2.21
+	},
+	{
+		"name": "Alphecca",
+		"constellation": "CrB",
+		"raHours": 15.57813,
+		"decDeg": 26.71469,
+		"magnitude": 2.22
+	},
+	{
+		"name": "Mizar",
+		"constellation": "UMa",
+		"raHours": 13.39875,
+		"decDeg": 54.92536,
+		"magnitude": 2.23
+	},
+	{
+		"name": "Sadr",
+		"constellation": "Cyg",
+		"raHours": 20.37047,
+		"decDeg": 40.25668,
+		"magnitude": 2.23
+	},
+	{
+		"name": "Suhail",
+		"constellation": "Vel",
+		"raHours": 9.13327,
+		"decDeg": -43.43259,
+		"magnitude": 2.23
+	},
+	{
+		"name": "Eltanin",
+		"constellation": "Dra",
+		"raHours": 17.94344,
+		"decDeg": 51.4889,
+		"magnitude": 2.24
+	},
+	{
+		"name": "Schedar",
+		"constellation": "Cas",
+		"raHours": 0.67512,
+		"decDeg": 56.53733,
+		"magnitude": 2.24
+	},
+	{
+		"name": "Mintaka",
+		"constellation": "Ori",
+		"raHours": 5.53345,
+		"decDeg": -0.29909,
+		"magnitude": 2.25
+	},
+	{
+		"name": "Caph",
+		"constellation": "Cas",
+		"raHours": 0.15289,
+		"decDeg": 59.14978,
+		"magnitude": 2.28
+	},
+	{
+		"name": "Dschubba",
+		"constellation": "Sco",
+		"raHours": 16.00556,
+		"decDeg": -22.62171,
+		"magnitude": 2.29
+	},
+	{
+		"name": "Larawag",
+		"constellation": "Sco",
+		"raHours": 16.83608,
+		"decDeg": -34.29323,
+		"magnitude": 2.29
+	},
+	{
+		"name": "Merak",
+		"constellation": "UMa",
+		"raHours": 11.03068,
+		"decDeg": 56.38243,
+		"magnitude": 2.34
+	},
+	{
+		"name": "Izar",
+		"constellation": "Boo",
+		"raHours": 14.74978,
+		"decDeg": 27.07422,
+		"magnitude": 2.35
+	},
+	{
+		"name": "Enif",
+		"constellation": "Peg",
+		"raHours": 21.73643,
+		"decDeg": 9.87501,
+		"magnitude": 2.38
+	},
+	{
+		"name": "Ankaa",
+		"constellation": "Phe",
+		"raHours": 0.43806,
+		"decDeg": -42.30598,
+		"magnitude": 2.4
+	},
+	{
+		"name": "Phecda",
+		"constellation": "UMa",
+		"raHours": 11.89717,
+		"decDeg": 53.69476,
+		"magnitude": 2.41
+	},
+	{
+		"name": "Sabik",
+		"constellation": "Oph",
+		"raHours": 17.17297,
+		"decDeg": -15.72491,
+		"magnitude": 2.43
+	},
+	{
+		"name": "Scheat",
+		"constellation": "Peg",
+		"raHours": 23.0629,
+		"decDeg": 28.08279,
+		"magnitude": 2.44
+	},
+	{
+		"name": "Alderamin",
+		"constellation": "Cep",
+		"raHours": 21.30963,
+		"decDeg": 62.58557,
+		"magnitude": 2.45
+	},
+	{
+		"name": "Aludra",
+		"constellation": "CMa",
+		"raHours": 7.40158,
+		"decDeg": -29.3031,
+		"magnitude": 2.45
+	},
+	{
+		"name": "Markeb",
+		"constellation": "Vel",
+		"raHours": 9.36856,
+		"decDeg": -55.01067,
+		"magnitude": 2.47
+	},
+	{
+		"name": "Aljanah",
+		"constellation": "Cyg",
+		"raHours": 20.77018,
+		"decDeg": 33.97026,
+		"magnitude": 2.48
+	},
+	{
+		"name": "Markab",
+		"constellation": "Peg",
+		"raHours": 23.07935,
+		"decDeg": 15.20526,
+		"magnitude": 2.49
+	},
+	{
+		"name": "Menkar",
+		"constellation": "Cet",
+		"raHours": 3.03799,
+		"decDeg": 4.08973,
+		"magnitude": 2.54
+	},
+	{
+		"name": "Acrab",
+		"constellation": "Sco",
+		"raHours": 16.09062,
+		"decDeg": -19.80545,
+		"magnitude": 2.56
+	},
+	{
+		"name": "Zosma",
+		"constellation": "Leo",
+		"raHours": 11.23514,
+		"decDeg": 20.52372,
+		"magnitude": 2.56
+	},
+	{
+		"name": "Arneb",
+		"constellation": "Lep",
+		"raHours": 5.5455,
+		"decDeg": -17.82229,
+		"magnitude": 2.58
+	},
+	{
+		"name": "Gienah",
+		"constellation": "Crv",
+		"raHours": 12.26344,
+		"decDeg": -17.54193,
+		"magnitude": 2.58
+	},
+	{
+		"name": "Ascella",
+		"constellation": "Sgr",
+		"raHours": 19.04353,
+		"decDeg": -29.8801,
+		"magnitude": 2.6
+	},
+	{
+		"name": "Zubeneschamali",
+		"constellation": "Lib",
+		"raHours": 15.28345,
+		"decDeg": -9.38292,
+		"magnitude": 2.61
+	},
+	{
+		"name": "Unukalhai",
+		"constellation": "Ser",
+		"raHours": 15.7378,
+		"decDeg": 6.42563,
+		"magnitude": 2.63
+	},
+	{
+		"name": "Sheratan",
+		"constellation": "Ari",
+		"raHours": 1.91067,
+		"decDeg": 20.80804,
+		"magnitude": 2.64
+	},
+	{
+		"name": "Kraz",
+		"constellation": "Crv",
+		"raHours": 12.57312,
+		"decDeg": -23.39676,
+		"magnitude": 2.65
+	},
+	{
+		"name": "Mahasim",
+		"constellation": "Aur",
+		"raHours": 5.99535,
+		"decDeg": 37.21258,
+		"magnitude": 2.65
+	},
+	{
+		"name": "Phact",
+		"constellation": "Col",
+		"raHours": 5.66082,
+		"decDeg": -34.07411,
+		"magnitude": 2.65
+	},
+	{
+		"name": "Ruchbah",
+		"constellation": "Cas",
+		"raHours": 1.43022,
+		"decDeg": 60.23528,
+		"magnitude": 2.66
+	},
+	{
+		"name": "Muphrid",
+		"constellation": "Boo",
+		"raHours": 13.91141,
+		"decDeg": 18.39772,
+		"magnitude": 2.68
+	},
+	{
+		"name": "Hassaleh",
+		"constellation": "Aur",
+		"raHours": 4.94989,
+		"decDeg": 33.16609,
+		"magnitude": 2.69
+	},
+	{
+		"name": "Lesath",
+		"constellation": "Sco",
+		"raHours": 17.51273,
+		"decDeg": -37.29581,
+		"magnitude": 2.7
+	},
+	{
+		"name": "Kaus Media",
+		"constellation": "Sgr",
+		"raHours": 18.3499,
+		"decDeg": -29.8281,
+		"magnitude": 2.72
+	},
+	{
+		"name": "Tarazed",
+		"constellation": "Aql",
+		"raHours": 19.77099,
+		"decDeg": 10.61326,
+		"magnitude": 2.72
+	},
+	{
+		"name": "Athebyne",
+		"constellation": "Dra",
+		"raHours": 16.39986,
+		"decDeg": 61.51421,
+		"magnitude": 2.73
+	},
+	{
+		"name": "Yed Prior",
+		"constellation": "Oph",
+		"raHours": 16.23909,
+		"decDeg": -3.69432,
+		"magnitude": 2.73
+	},
+	{
+		"name": "Porrima",
+		"constellation": "Vir",
+		"raHours": 12.69435,
+		"decDeg": -1.44937,
+		"magnitude": 2.74
+	},
+	{
+		"name": "Hatysa",
+		"constellation": "Ori",
+		"raHours": 5.59055,
+		"decDeg": -5.9099,
+		"magnitude": 2.75
+	},
+	{
+		"name": "Zubenelgenubi",
+		"constellation": "Lib",
+		"raHours": 14.84798,
+		"decDeg": -16.04178,
+		"magnitude": 2.75
+	},
+	{
+		"name": "Cebalrai",
+		"constellation": "Oph",
+		"raHours": 17.72454,
+		"decDeg": 4.5673,
+		"magnitude": 2.76
+	},
+	{
+		"name": "Cursa",
+		"constellation": "Eri",
+		"raHours": 5.13083,
+		"decDeg": -5.08645,
+		"magnitude": 2.78
+	},
+	{
+		"name": "Kornephoros",
+		"constellation": "Her",
+		"raHours": 16.50367,
+		"decDeg": 21.48961,
+		"magnitude": 2.78
+	},
+	{
+		"name": "Rasalgethi",
+		"constellation": "Her",
+		"raHours": 17.24413,
+		"decDeg": 14.39033,
+		"magnitude": 2.78
+	},
+	{
+		"name": "Imai",
+		"constellation": "Cru",
+		"raHours": 12.25243,
+		"decDeg": -58.74893,
+		"magnitude": 2.79
+	},
+	{
+		"name": "Rastaban",
+		"constellation": "Dra",
+		"raHours": 17.50721,
+		"decDeg": 52.30139,
+		"magnitude": 2.79
+	},
+	{
+		"name": "Nihal",
+		"constellation": "Lep",
+		"raHours": 5.47076,
+		"decDeg": -20.75944,
+		"magnitude": 2.81
+	},
+	{
+		"name": "Kaus Borealis",
+		"constellation": "Sgr",
+		"raHours": 18.46618,
+		"decDeg": -25.4217,
+		"magnitude": 2.82
+	},
+	{
+		"name": "Paikauhale",
+		"constellation": "Sco",
+		"raHours": 16.59804,
+		"decDeg": -28.21602,
+		"magnitude": 2.82
+	},
+	{
+		"name": "Algenib",
+		"constellation": "Peg",
+		"raHours": 0.2206,
+		"decDeg": 15.1836,
+		"magnitude": 2.83
+	},
+	{
+		"name": "Tureis",
+		"constellation": "Pup",
+		"raHours": 8.12574,
+		"decDeg": -24.30432,
+		"magnitude": 2.83
+	},
+	{
+		"name": "Alcyone",
+		"constellation": "Tau",
+		"raHours": 3.79141,
+		"decDeg": 24.10514,
+		"magnitude": 2.85
+	},
+	{
+		"name": "Deneb Algedi",
+		"constellation": "Cap",
+		"raHours": 21.78401,
+		"decDeg": -16.12729,
+		"magnitude": 2.85
+	},
+	{
+		"name": "Vindemiatrix",
+		"constellation": "Vir",
+		"raHours": 13.03628,
+		"decDeg": 10.95915,
+		"magnitude": 2.85
+	},
+	{
+		"name": "Fawaris",
+		"constellation": "Cyg",
+		"raHours": 19.74957,
+		"decDeg": 45.13081,
+		"magnitude": 2.86
+	},
+	{
+		"name": "Tejat",
+		"constellation": "Gem",
+		"raHours": 6.38267,
+		"decDeg": 22.51359,
+		"magnitude": 2.87
+	},
+	{
+		"name": "Acamar",
+		"constellation": "Eri",
+		"raHours": 2.97102,
+		"decDeg": -40.30467,
+		"magnitude": 2.88
+	},
+	{
+		"name": "Albaldah",
+		"constellation": "Sgr",
+		"raHours": 19.16273,
+		"decDeg": -21.02361,
+		"magnitude": 2.88
+	},
+	{
+		"name": "Cor Caroli",
+		"constellation": "CVn",
+		"raHours": 12.93381,
+		"decDeg": 38.31838,
+		"magnitude": 2.89
+	},
+	{
+		"name": "Fang",
+		"constellation": "Sco",
+		"raHours": 15.98087,
+		"decDeg": -26.1141,
+		"magnitude": 2.89
+	},
+	{
+		"name": "Gomeisa",
+		"constellation": "CMi",
+		"raHours": 7.45251,
+		"decDeg": 8.28932,
+		"magnitude": 2.89
+	},
+	{
+		"name": "Alniyat",
+		"constellation": "Sco",
+		"raHours": 16.35314,
+		"decDeg": -25.5928,
+		"magnitude": 2.9
+	},
+	{
+		"name": "Sadalsuud",
+		"constellation": "Aqr",
+		"raHours": 21.52598,
+		"decDeg": -5.57117,
+		"magnitude": 2.9
+	},
+	{
+		"name": "Matar",
+		"constellation": "Peg",
+		"raHours": 22.7167,
+		"decDeg": 30.22125,
+		"magnitude": 2.93
+	},
+	{
+		"name": "Algorab",
+		"constellation": "Crv",
+		"raHours": 12.49774,
+		"decDeg": -16.51543,
+		"magnitude": 2.94
+	},
+	{
+		"name": "Sadalmelik",
+		"constellation": "Aqr",
+		"raHours": 22.0964,
+		"decDeg": -0.31985,
+		"magnitude": 2.95
+	},
+	{
+		"name": "Ras Elased Australis",
+		"constellation": "Leo",
+		"raHours": 9.76419,
+		"decDeg": 23.77426,
+		"magnitude": 2.97
+	},
+	{
+		"name": "Tianguan",
+		"constellation": "Tau",
+		"raHours": 5.62741,
+		"decDeg": 21.14255,
+		"magnitude": 2.97
+	},
+	{
+		"name": "Zaurak",
+		"constellation": "Eri",
+		"raHours": 3.96716,
+		"decDeg": -13.50851,
+		"magnitude": 2.97
+	},
+	{
+		"name": "Alnasl",
+		"constellation": "Sgr",
+		"raHours": 18.0968,
+		"decDeg": -30.42409,
+		"magnitude": 2.98
+	},
+	{
+		"name": "Okab",
+		"constellation": "Aql",
+		"raHours": 19.09017,
+		"decDeg": 13.86348,
+		"magnitude": 2.99
+	},
+	{
+		"name": "Aldhanab",
+		"constellation": "Gru",
+		"raHours": 21.89881,
+		"decDeg": -37.36485,
+		"magnitude": 3
+	},
+	{
+		"name": "Pherkad",
+		"constellation": "UMi",
+		"raHours": 15.34548,
+		"decDeg": 71.83402,
+		"magnitude": 3
+	},
+	{
+		"name": "Xamidimura",
+		"constellation": "Sco",
+		"raHours": 16.86451,
+		"decDeg": -38.04738,
+		"magnitude": 3
+	}
+]

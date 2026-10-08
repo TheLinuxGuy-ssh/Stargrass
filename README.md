@@ -15,6 +15,7 @@ The model never does astronomy. Every position, rise time and phase comes from `
 - [`astronomy-engine`](https://github.com/cosinekitty/astronomy) for all sky math
 - [`@mlc-ai/web-llm`](https://github.com/mlc-ai/web-llm) for running the model in the browser over WebGPU
 - Google Gemma for the model weights
+- Star positions and magnitudes come from the [HYG Database](https://github.com/astronexus/HYG-Database) by David Nash, licensed [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/). The 144 named stars at magnitude 3.0 or brighter are derived from it by `scripts/build-stars.mjs`.
 
 ## Status
 

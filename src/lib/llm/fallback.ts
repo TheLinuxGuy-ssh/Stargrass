@@ -1,4 +1,5 @@
 import type { ToolCall } from '#lib/sky/types';
+import { STARS } from '#lib/sky/stars';
 
 /**
  * Routing without a model. These rules are the whole app on devices with no
@@ -140,6 +141,15 @@ export function routeByKeyword(question: string): ToolCall {
 	for (const [word, name] of Object.entries(PLANETS)) {
 		if (new RegExp(`\\b${word}\\b`).test(q)) {
 			return { tool: 'find_object', args: { name } };
+		}
+	}
+
+	// Longest names first, so "Rigel" cannot match inside a longer name.
+	const starNames = STARS.map((star) => star.name).sort((a, b) => b.length - a.length);
+	for (const starName of starNames) {
+		const escaped = starName.toLowerCase().replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+		if (new RegExp(`\\b${escaped}\\b`).test(q)) {
+			return { tool: 'find_object', args: { name: starName } };
 		}
 	}
 

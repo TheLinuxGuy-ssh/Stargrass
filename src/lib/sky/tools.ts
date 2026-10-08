@@ -3,6 +3,7 @@ import { PLANETS, horizonOf, magnitude } from './bodies.js';
 import { compass, fists } from './format.js';
 import { moonResult, type MoonResult } from './moon.js';
 import { observerFor, type Place } from './observer.js';
+import { STARS, findStar, starPosition, starRiseSet } from './stars.js';
 import { twilight } from './twilight.js';
 
 export type SkyKind = 'planet' | 'moon' | 'star';
@@ -62,6 +63,13 @@ function planetObjects(obs: A.Observer, date: Date): SkyObject[] {
 	}).sort((a, b) => b.altitude - a.altitude);
 }
 
+function starObjects(obs: A.Observer, date: Date): SkyObject[] {
+	return STARS.map((star) => {
+		const { altitude, azimuth } = starPosition(star, date, obs);
+		return skyObject(star.name, 'star', altitude, azimuth, star.magnitude);
+	}).sort((a, b) => b.altitude - a.altitude);
+}
+
 export function tonight(place: Place, date: Date): TonightResult {
 	const obs = observerFor(place);
 	const window = twilight(obs, date);
@@ -84,7 +92,7 @@ export function whatsUp(place: Place, date: Date, args: WhatsUpArgs = {}): SkyOb
 	const obs = observerFor(place);
 	const wanted = args.direction?.trim().toUpperCase();
 
-	const objects = planetObjects(obs, date).filter((object) => {
+	const objects = [...planetObjects(obs, date), ...starObjects(obs, date)].filter((object) => {
 		if (!object.aboveHorizon) return false;
 		if (args.minAltitude !== undefined && object.altitude < args.minAltitude) return false;
 		if (wanted !== undefined && object.compass !== wanted) return false;
@@ -109,6 +117,20 @@ function riseSet(body: A.Body, obs: A.Observer, date: Date): { rise: A.AstroTime
 export function findObject(place: Place, date: Date, name: string): FindObjectResult {
 	const obs = observerFor(place);
 	const wanted = name.trim().toLowerCase();
+
+	const star = findStar(wanted);
+
+	if (star !== undefined) {
+		const { altitude, azimuth } = starPosition(star, date, obs);
+		const object = skyObject(star.name, 'star', altitude, azimuth, star.magnitude);
+
+		if (object.aboveHorizon) {
+			return { found: true, ...object, riseUtc: null, setUtc: null };
+		}
+
+		const times = starRiseSet(star, date, obs);
+		return { found: true, ...object, riseUtc: times.riseUtc, setUtc: times.setUtc };
+	}
 
 	const body = PLANETS.find((planet) => String(planet).toLowerCase() === wanted);
 

@@ -183,18 +183,26 @@ describe('whatsUp', () => {
 		expect(up.map((o) => o.name)).not.toContain('Jupiter');
 	});
 
+	it('includes stars, since M6, and puts them on equal footing', () => {
+		const up = whatsUp(DELHI, FIXTURE_TIME);
+		expect(up.some((o) => o.kind === 'star')).toBe(true);
+		expect(up.map((o) => o.name)).toContain('Vega');
+	});
+
 	it('filters by compass direction', () => {
-		expect(whatsUp(DELHI, FIXTURE_TIME, { direction: 'E' }).map((o) => o.name)).toEqual([
-			'Saturn'
-		]);
+		const east = whatsUp(DELHI, FIXTURE_TIME, { direction: 'E' });
+		expect(east.map((o) => o.name)).toContain('Saturn');
+		expect(east.every((o) => o.compass === 'E')).toBe(true);
 	});
 
 	it('filters by minimum altitude', () => {
-		expect(whatsUp(DELHI, FIXTURE_TIME, { minAltitude: 30 })).toHaveLength(0);
+		const high = whatsUp(DELHI, FIXTURE_TIME, { minAltitude: 10 });
+		expect(high.length).toBeGreaterThan(0);
+		expect(high.every((o) => o.altitude >= 10)).toBe(true);
 	});
 
 	it('returns an empty list when nothing matches', () => {
-		expect(whatsUp(DELHI, FIXTURE_TIME, { direction: 'N' })).toHaveLength(0);
+		expect(whatsUp(DELHI, FIXTURE_TIME, { minAltitude: 90 })).toHaveLength(0);
 	});
 });
 
@@ -222,9 +230,16 @@ describe('findObject', () => {
 	});
 
 	it('says it does not know an unknown name', () => {
-		expect(findObject(DELHI, FIXTURE_TIME, 'Betelgeuse')).toEqual({
+		// Betelgeuse was unknown when this test was written in M1 and became a
+		// known star in M6, so the placeholder has to be a name that is never
+		// going to appear in a catalogue.
+		expect(findObject(DELHI, FIXTURE_TIME, 'Betelguse')).toEqual({
 			found: false,
-			name: 'Betelgeuse'
+			name: 'Betelguse'
 		});
+	});
+
+	it('knows Betelgeuse now that the star catalogue exists', () => {
+		expect(findObject(DELHI, FIXTURE_TIME, 'Betelgeuse').found).toBe(true);
 	});
 });
