@@ -1,0 +1,10 @@
+{
+	"name": "Stargrass",
+	"short_name": "Stargrass",
+	"description": "An offline night sky guide.",
+	"start_url": "/",
+	"scope": "/",
+	"display": "standalone",
+	"background_color": "#07090c",
+	"theme_color": "#07090c"
+}

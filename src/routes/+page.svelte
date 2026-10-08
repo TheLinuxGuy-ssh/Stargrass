@@ -3,7 +3,9 @@
 	import { formatDuration, formatLocalTime } from '#lib/sky/format';
 	import { tonight as tonightTool, type SkyObject, type TonightResult } from '#lib/sky/tools';
 	import type { Place } from '#lib/sky/observer';
+	import { ask, type Mode } from '#lib/llm/ask';
 	import { loadPlace, requestGps, savePlace, type PlaceSource } from '#lib/ui/place';
+	import { prepareOffline, type OfflineState } from '#lib/ui/offline';
 	import { applyTheme, loadTheme, saveTheme, type Theme } from '#lib/ui/theme';
 
 	let place = $state<Place | null>(null);
@@ -17,6 +19,10 @@
 	let manualElevation = $state('0');
 	let gpsError = $state<string | null>(null);
 	let busy = $state(false);
+	let question = $state('');
+	let answer = $state<string | null>(null);
+	let mode = $state<Mode>('fallback');
+	let offline = $state<OfflineState>('preparing');
 
 	let timeZone = $derived(Intl.DateTimeFormat().resolvedOptions().timeZone);
 	let displayTime = $derived(frozen === null ? now : new Date(frozen));
@@ -44,6 +50,11 @@
 		const timer = setInterval(() => {
 			now = new Date();
 		}, 30_000);
+
+		void prepareOffline().then((state) => {
+			offline = state;
+		});
+
 		return () => clearInterval(timer);
 	});
 
@@ -83,10 +94,23 @@
 		theme = theme === 'dark' ? 'red' : 'dark';
 		saveTheme(theme);
 	}
+
+	function askNow(event: SubmitEvent): void {
+		event.preventDefault();
+		if (place === null) return;
+		const trimmed = question.trim();
+		if (trimmed === '') return;
+		const reply = ask(trimmed, place, displayTime);
+		answer = reply.text;
+		mode = reply.mode;
+	}
 </script>
 
 <svelte:head>
 	<meta name="theme-color" content={theme === 'red' ? '#000000' : '#07090c'} />
+	<link rel="manifest" href="/manifest.webmanifest" />
+	<meta name="apple-mobile-web-app-capable" content="yes" />
+	<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
 	<title>Stargrass</title>
 </svelte:head>
 
@@ -245,6 +269,52 @@
 					</ul>
 				</details>
 			{/if}
+		</section>
+
+		<section class="flex flex-col gap-3">
+			<form onsubmit={askNow} class="flex flex-col gap-3">
+				<label class="flex flex-col gap-1 text-sm">
+					<span style="color: var(--ink-dim)">Ask about the sky</span>
+					<input
+						type="text"
+						bind:value={question}
+						enterkeyhint="go"
+						placeholder="is Mars up"
+						class="min-h-12 rounded-xl border px-4"
+						style="border-color: var(--line); background: var(--surface); color: var(--ink-bright)"
+					/>
+				</label>
+				<button
+					type="submit"
+					disabled={question.trim() === ''}
+					class="min-h-12 rounded-xl px-5 font-medium disabled:opacity-40"
+					style="background: var(--surface); border: 1px solid var(--accent); color: var(--ink-bright)"
+				>
+					Ask
+				</button>
+			</form>
+
+			{#if answer !== null}
+				<p class="rounded-xl border px-4 py-3" style="border-color: var(--line); color: var(--ink-bright)">
+					{answer}
+				</p>
+			{/if}
+
+			<p class="text-xs" style="color: var(--ink-dim)">
+				{mode === 'model' ? 'Answered by the model on your device.' : 'Keyword mode. No model is running.'}
+			</p>
+
+			<p class="text-xs" style="color: var(--ink-dim)">
+				{#if offline === 'ready'}
+					Saved for offline use.
+				{:else if offline === 'preparing'}
+					Saving for offline use.
+				{:else if offline === 'unsupported'}
+					This browser will not work offline.
+				{:else}
+					Could not save for offline use. Keep a connection for now.
+				{/if}
+			</p>
 		</section>
 
 		<footer class="mt-auto flex flex-col gap-2 pt-6 text-xs" style="color: var(--ink-dim)">
